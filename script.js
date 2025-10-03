@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     
-
     // --- GESTION DE LA SAUVEGARDE LOCALE ---
     const STORAGE_KEY = 'clartem-briefing-bien-etre-data';
     let allFormElements = [];
@@ -43,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { id: 'section-2-about', key: 'about', name: 'À Propos : Votre Histoire', keyFields: ['about-title-final', 'about-story-final'], isOptional: false, isFilled: () => !!document.getElementById('about-title-final')?.value.trim() },
         { id: 'section-3-services', key: 'services', name: 'Accompagnements : Vos Offres', keyFields: ['services-title-final', 'service-1-name'], isOptional: false, isFilled: () => !!document.getElementById('service-1-name')?.value.trim() },
         { id: 'section-4-approach', key: 'approach', name: 'Approche : Votre Méthode', keyFields: ['approach-title-final', 'approach-step-1-title'], isOptional: false, isFilled: () => !!document.getElementById('approach-title-final')?.value.trim() },
-        { id: 'section-5-portfolio', key: 'portfolio', name: 'Galerie : Votre Univers', keyFields: ['portfolio-title-final', 'portfolio-1-image'], isOptional: false, isFilled: () => document.getElementById('portfolio-1-image')?.files.length > 0 },
+        { id: 'section-5-portfolio', key: 'portfolio', name: 'Galerie : Votre Univers', keyFields: ['portfolio-title-final', 'portfolio-1-image'], isOptional: false, isFilled: () => !!document.getElementById('portfolio-1-image')?.value.trim() }, // MODIFIÉ
         { id: 'section-6-testimonials', key: 'testimonials', name: 'Témoignages : Leurs Mots', keyFields: ['testimonials-title-final', 'testimonial-1-text'], isOptional: false, isFilled: () => !!document.getElementById('testimonial-1-name')?.value.trim() },
         { id: 'section-7-faq', key: 'faq', name: 'FAQ : Leurs Questions', keyFields: ['faq-title-final', 'faq-q-1'], isOptional: false, isFilled: () => !!document.getElementById('faq-q-1')?.value.trim() },
         { id: 'section-8-blog', key: 'blog', name: 'Blog (Optionnel)', keyFields: ['blog-title-final'], isOptional: true, isFilled: () => !!document.getElementById('blog-title-final')?.value.trim() },
@@ -72,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (el.type === 'checkbox' || el.type === 'radio') {
                 data[id] = el.checked;
             } else if (el.type === 'file') {
-                data[id] = el.files.length > 0 ? el.files[0].name : '';
+                // On ne sauvegarde plus les infos des champs 'file' visibles
+                // Les URL sont dans les champs cachés qui sont de type 'hidden' (et donc 'text')
             } else {
                 data[id] = el.value;
             }
@@ -91,14 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (el.type === 'checkbox' || el.type === 'radio') {
                     el.checked = data[id];
                 } else if (el.type === 'file') {
-                    if (data[id]) {
-                        const infoSpan = document.createElement('span');
-                        infoSpan.className = 'file-reselect-info';
-                        infoSpan.textContent = `Fichier précédemment sélectionné : ${data[id]}. Veuillez le resélectionner.`;
-                        const oldInfo = el.parentElement.querySelector('.file-reselect-info');
-                        if (oldInfo) oldInfo.remove();
-                        el.parentElement.insertBefore(infoSpan, el.nextSibling);
-                    }
+                    // Ne rien faire pour les champs de type 'file' au chargement
                 } else {
                     el.value = data[id];
                 }
@@ -112,6 +105,69 @@ document.addEventListener('DOMContentLoaded', function () {
             location.reload();
         }
     }
+
+    // --- GESTION DE L'UPLOAD CLOUDINARY ---
+    const CLOUDINARY_CLOUD_NAME = "VOTRE_CLOUD_NAME"; // <-- REMPLACEZ PAR VOTRE CLOUD NAME
+    const CLOUDINARY_UPLOAD_PRESET = "VOTRE_UPLOAD_PRESET"; // <-- REMPLACEZ PAR VOTRE UPLOAD PRESET
+
+    function setupCloudinaryUploads() {
+        const fileInputs = document.querySelectorAll('input[type="file"][data-cloudinary-field]');
+        
+        fileInputs.forEach(fileInput => {
+            fileInput.addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const hiddenInputId = fileInput.dataset.cloudinaryField;
+                const hiddenInput = document.getElementById(hiddenInputId);
+                const statusElement = document.getElementById(`status-${hiddenInputId}`);
+
+                if (!hiddenInput || !statusElement) {
+                    console.error(`Éléments manquants pour l'upload : ${hiddenInputId}`);
+                    return;
+                }
+
+                statusElement.className = 'upload-status uploading';
+                statusElement.textContent = 'Téléversement en cours...';
+
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+                try {
+                    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Erreur HTTP: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    const secureUrl = data.secure_url;
+
+                    hiddenInput.value = secureUrl;
+                    statusElement.className = 'upload-status success';
+                    statusElement.textContent = `✓ Fichier téléversé : ${file.name}`;
+                    
+                    // Déclencher manuellement les mises à jour
+                    saveData();
+                    updateAllProgressVisuals();
+                    // Mettre à jour les résumés qui dépendent de ce fichier
+                    const changeEvent = new Event('change', { bubbles: true });
+                    hiddenInput.dispatchEvent(changeEvent);
+
+                } catch (error) {
+                    console.error("Erreur d'upload sur Cloudinary:", error);
+                    statusElement.className = 'upload-status error';
+                    statusElement.textContent = `❌ Échec du téléversement. Veuillez réessayer.`;
+                    hiddenInput.value = '';
+                }
+            });
+        });
+    }
+
 
     // --- GESTION DU DÉFILEMENT FLUIDE ---
     const startButton = document.querySelector('.cta-button');
@@ -137,7 +193,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const filledFields = section.keyFields.filter(fieldId => {
             const el = document.getElementById(fieldId);
             if (!el) return false;
-            if (el.type === 'file') return el.files.length > 0;
+            // La logique pour les fichiers a changé : on vérifie la valeur du champ caché
+            if (el.type === 'file') {
+                const hiddenInputId = el.dataset.cloudinaryField;
+                const hiddenInput = document.getElementById(hiddenInputId);
+                return hiddenInput && hiddenInput.value.trim() !== '';
+            }
             if (el.type === 'radio' || el.type === 'checkbox') {
                 const groupName = el.name;
                 return !!document.querySelector(`input[name="${groupName}"]:checked`);
@@ -295,14 +356,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     optionalRow.style.display = value.trim() !== '' ? 'table-row' : 'none';
                 }
             };
-            const eventType = (inputElement.type === 'file') ? 'change' : 'input';
-            inputElement.addEventListener(eventType, update);
-            // Initial call to populate summaries on load
-            if (inputElement.type === 'file') {
-                // For files, we don't have a value on load, but we can check localStorage later
-            } else {
-                update();
-            }
+            // On écoute 'input' et 'change' pour couvrir tous les cas (texte, radio, et nos champs cachés mis à jour par JS)
+            inputElement.addEventListener('input', update);
+            inputElement.addEventListener('change', update);
+            update();
         }
     }
 
@@ -317,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         function updateHeroVisualSummary() {
             const selectedRadio = document.querySelector('input[name="hero-visual-choice"]:checked');
-            const imageInput = document.getElementById('hero-image-upload');
+            const imageInput = document.getElementById('hero-image-upload'); // Champ caché
             const colorInput = document.getElementById('hero-color-choice');
             const output = document.getElementById('summary-hero-visual');
             if (!output) return;
@@ -326,14 +383,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
             if (selectedRadio.value === 'image') {
-                output.textContent = imageInput.files.length > 0 ? `Image fournie : ${imageInput.files[0].name}` : 'Image choisie (en attente)';
+                output.textContent = imageInput.value ? `Image fournie (lien) : ${imageInput.value}` : 'Image choisie (en attente)';
             } else {
                 output.textContent = `Fond de couleur : ${colorInput.value || 'Non spécifié'}`;
             }
         }
         document.querySelectorAll('input[name="hero-visual-choice"], #hero-image-upload, #hero-color-choice').forEach(el => {
-            const event = (el.type === 'file' || el.type === 'radio') ? 'change' : 'input';
-            el.addEventListener(event, updateHeroVisualSummary);
+            el.addEventListener('change', updateHeroVisualSummary);
+            el.addEventListener('input', updateHeroVisualSummary);
         });
         updateHeroVisualSummary();
 
@@ -342,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setupSync('about-story-final', 'summary-about-story');
         document.getElementById('about-image-upload').addEventListener('change', function() {
             const output = document.getElementById('summary-about-image');
-            output.textContent = this.files.length > 0 ? `Fichier fourni : ${this.files[0].name}` : '';
+            output.textContent = this.value ? `Fichier fourni (lien) : ${this.value}` : '';
         });
 
         // Section 3: Accompagnements (Services)
@@ -406,11 +463,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const images = [];
                 let hasContent = false;
                 for (let i = 1; i <= 3; i++) {
-                    const imageInput = document.getElementById(`portfolio-${i}-image`);
+                    const imageInput = document.getElementById(`portfolio-${i}-image`); // Champ caché
                     const legendInput = document.getElementById(`portfolio-${i}-title`);
-                    if (imageInput?.files.length > 0) {
+                    if (imageInput?.value) {
                         hasContent = true;
-                        let text = `Image ${i}: ${imageInput.files[0].name}`;
+                        let text = `Image ${i}: ${imageInput.value}`;
                         if (legendInput?.value.trim()) text += `\n- Légende: ${legendInput.value.trim()}`;
                         images.push(text);
                     }
@@ -440,8 +497,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 summaryRow.style.display = 'table-row';
                 const title = document.getElementById(`testimonial-${num}-title`).value.trim();
-                const photo = document.getElementById(`testimonial-${num}-photo`).files;
-                summaryOutput.innerText = `De : ${name} (${title})\nTexte : "${text}"\nPhoto : ${photo.length > 0 ? photo[0].name : 'Non fournie'}`;
+                const photoUrl = document.getElementById(`testimonial-${num}-photo`).value; // Champ caché
+                summaryOutput.innerText = `De : ${name} (${title})\nTexte : "${text}"\nPhoto : ${photoUrl ? photoUrl : 'Non fournie'}`;
             }
             [`testimonial-${num}-text`, `testimonial-${num}-name`, `testimonial-${num}-title`].forEach(id => document.getElementById(id).addEventListener('input', update));
             document.getElementById(`testimonial-${num}-photo`).addEventListener('change', update);
@@ -650,13 +707,18 @@ document.addEventListener('DOMContentLoaded', function () {
         setupVerticalNavObserver();
         setupConditionalFields();
         setupPersonalization();
+        setupCloudinaryUploads(); // NOUVEL APPEL
         
         allFormElements.forEach(input => {
-            const eventType = (input.type === 'radio' || input.type === 'checkbox' || input.type === 'file') ? 'change' : 'input';
-            input.addEventListener(eventType, () => {
-                saveData();
-                updateAllProgressVisuals();
-            });
+            // On exclut les champs de type 'file' de la sauvegarde auto standard,
+            // car elle est gérée par la fonction d'upload Cloudinary
+            if (input.type !== 'file') {
+                const eventType = (input.type === 'radio' || input.type === 'checkbox') ? 'change' : 'input';
+                input.addEventListener(eventType, () => {
+                    saveData();
+                    updateAllProgressVisuals();
+                });
+            }
         });
         
         document.getElementById('clear-data-button')?.addEventListener('click', clearData);
@@ -671,12 +733,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function generateStructuredData() {
         const data = {};
         const getValue = (id) => document.getElementById(id)?.value.trim() || '';
-        const getFileName = (id) => document.getElementById(id)?.files[0]?.name || '';
         const getRadioValue = (name) => document.querySelector(`input[name="${name}"]:checked`)?.value || '';
 
         data.client = { name: getValue('client-name-input'), date: getValue('client-date-input') };
-        data.hero = { title1: getValue('hero-title-1'), subtitle1: getValue('hero-subtitle-1'), cta1: getValue('hero-cta-primary'), visualType: getRadioValue('hero-visual-choice'), imageFile: getFileName('hero-image-upload'), color: getValue('hero-color-choice') };
-        data.about = { title: getValue('about-title-final'), story: getValue('about-story-final'), imageFile: getFileName('about-image-upload') };
+        data.hero = { title1: getValue('hero-title-1'), subtitle1: getValue('hero-subtitle-1'), cta1: getValue('hero-cta-primary'), visualType: getRadioValue('hero-visual-choice'), imageUrl: getValue('hero-image-upload'), color: getValue('hero-color-choice') };
+        data.about = { title: getValue('about-title-final'), story: getValue('about-story-final'), imageUrl: getValue('about-image-upload') };
         data.services = { title: getValue('services-title-final'), offers: [] };
         for (let i = 1; i <= 3; i++) {
             const name = getValue(`service-${i}-name`);
@@ -689,13 +750,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         data.portfolio = { title: getValue('portfolio-title-final'), images: [] };
         for (let i = 1; i <= 3; i++) {
-            const imageFile = getFileName(`portfolio-${i}-image`);
-            if (imageFile) data.portfolio.images.push({ file: imageFile, legend: getValue(`portfolio-${i}-title`) });
+            const imageUrl = getValue(`portfolio-${i}-image`);
+            if (imageUrl) data.portfolio.images.push({ url: imageUrl, legend: getValue(`portfolio-${i}-title`) });
         }
         data.testimonials = { title: getValue('testimonials-title-final'), list: [] };
         for (let i = 1; i <= 3; i++) {
             const name = getValue(`testimonial-${i}-name`);
-            if (name) data.testimonials.list.push({ name, title: getValue(`testimonial-${i}-title`), text: getValue(`testimonial-${i}-text`), photoFile: getFileName(`testimonial-${i}-photo`) });
+            if (name) data.testimonials.list.push({ name, title: getValue(`testimonial-${i}-title`), text: getValue(`testimonial-${i}-text`), photoUrl: getValue(`testimonial-${i}-photo`) });
         }
         data.faq = { title: getValue('faq-title-final'), pairs: [] };
         for (let i = 1; i <= 4; i++) {
@@ -716,19 +777,23 @@ document.addEventListener('DOMContentLoaded', function () {
         let reportHTML = '';
         const generateField = (label, value) => {
             if (!value || (Array.isArray(value) && value.length === 0)) return `<div class="report-field"><strong>${label}</strong><div class="value empty">Non renseigné</div></div>`;
+            // Si la valeur est une URL d'image, on l'affiche
+            if (typeof value === 'string' && value.startsWith('http')) {
+                 return `<div class="report-field"><strong>${label}</strong><div class="value"><a href="${value}" target="_blank">${value}</a></div></div>`;
+            }
             const displayValue = Array.isArray(value) ? `<ul>${value.map(item => `<li>${item}</li>`).join('')}</ul>` : value;
             return `<div class="report-field"><strong>${label}</strong><div class="value">${displayValue}</div></div>`;
         };
         
-        reportHTML += `<div class="report-section"><h2>Section 1 : Héros</h2>${generateField('Titre', data.hero.title1)}${generateField('Sous-titre', data.hero.subtitle1)}${generateField('Bouton', data.hero.cta1)}</div>`;
-        reportHTML += `<div class="report-section"><h2>Section 2 : À Propos</h2>${generateField('Titre', data.about.title)}${generateField('Récit', data.about.story)}${generateField('Image', data.about.imageFile)}</div>`;
+        reportHTML += `<div class="report-section"><h2>Section 1 : Héros</h2>${generateField('Titre', data.hero.title1)}${generateField('Sous-titre', data.hero.subtitle1)}${generateField('Bouton', data.hero.cta1)}${generateField('Image (URL)', data.hero.imageUrl)}</div>`;
+        reportHTML += `<div class="report-section"><h2>Section 2 : À Propos</h2>${generateField('Titre', data.about.title)}${generateField('Récit', data.about.story)}${generateField('Image (URL)', data.about.imageUrl)}</div>`;
         let servicesHTML = data.services.offers.map((o, i) => `<h3>Accompagnement ${i+1}</h3>${generateField('Nom', o.name)}${generateField('Description', o.description)}${generateField('Prix/Durée', o.price)}`).join('');
         reportHTML += `<div class="report-section"><h2>Section 3 : Accompagnements</h2>${generateField('Titre', data.services.title)}${servicesHTML}</div>`;
         let approachHTML = data.approach.steps.map((s, i) => `<h3>Étape ${i+1}</h3>${generateField('Titre', s.title)}${generateField('Description', s.description)}`).join('');
         reportHTML += `<div class="report-section"><h2>Section 4 : Mon Approche</h2>${generateField('Titre', data.approach.title)}${generateField('Intro', data.approach.intro)}${approachHTML}</div>`;
-        let portfolioHTML = data.portfolio.images.map((img, i) => `<h3>Image ${i+1}</h3>${generateField('Fichier', img.file)}${generateField('Légende', img.legend)}`).join('');
+        let portfolioHTML = data.portfolio.images.map((img, i) => `<h3>Image ${i+1}</h3>${generateField('Fichier (URL)', img.url)}${generateField('Légende', img.legend)}`).join('');
         reportHTML += `<div class="report-section"><h2>Section 5 : Galerie</h2>${generateField('Titre', data.portfolio.title)}${portfolioHTML}</div>`;
-        let testimonialsHTML = data.testimonials.list.map((t, i) => `<h3>Témoignage ${i+1}</h3>${generateField('Nom', `${t.name} (${t.title})`)}${generateField('Texte', t.text)}`).join('');
+        let testimonialsHTML = data.testimonials.list.map((t, i) => `<h3>Témoignage ${i+1}</h3>${generateField('Nom', `${t.name} (${t.title})`)}${generateField('Texte', t.text)}${generateField('Photo (URL)', t.photoUrl)}`).join('');
         reportHTML += `<div class="report-section"><h2>Section 6 : Témoignages</h2>${generateField('Titre', data.testimonials.title)}${testimonialsHTML}</div>`;
         let faqHTML = data.faq.pairs.map((p, i) => `<h3>Q&R ${i+1}</h3>${generateField('Question', p.question)}${generateField('Réponse', p.answer)}`).join('');
         reportHTML += `<div class="report-section"><h2>Section 7 : FAQ</h2>${generateField('Titre', data.faq.title)}${faqHTML}</div>`;
