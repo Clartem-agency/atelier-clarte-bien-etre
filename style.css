@@ -41,15 +41,20 @@ body {
     padding: 0 2rem;
 }
 
+/* MODIFICATION : L'ancienne règle .site-header est maintenant commentée car l'élément a été supprimé du HTML */
+/*
 .site-header {
     padding: 3rem 0;
     text-align: center;
     margin-bottom: 2rem;
 }
+*/
 
+/* MODIFICATION : Le logo est maintenant stylisé pour s'intégrer dans la section d'accueil */
 .logo {
-    max-width: 280px;
+    max-width: 140px; /* On réduit la taille pour une meilleure hiérarchie */
     height: auto;
+    margin-bottom: 2.5rem; /* On crée un espace contrôlé avant le titre */
 }
 
 .page-section {
@@ -57,16 +62,26 @@ body {
 }
 
 /* --- PAGE DE GARDE & INTRODUCTION --- */
+
+/* MODIFICATION : La section .cover-page est améliorée pour un centrage vertical parfait */
 .cover-page {
     text-align: center;
-    padding: 5rem 0;
+    /* On utilise Flexbox pour centrer le contenu verticalement */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh; /* Assure que la section prend presque toute la hauteur de l'écran */
+    padding: 3rem 0;
     border-bottom: 1px solid var(--border-color);
 }
 
+/* MODIFICATION : Le titre principal est ajusté pour éviter toute marge supérieure */
 .main-title {
     font-size: 3rem;
     font-weight: 700;
     letter-spacing: -1.5px;
+    margin-top: 0; /* Important pour éviter les marges indésirées */
     margin-bottom: 1rem;
 }
 
