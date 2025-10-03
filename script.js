@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- GESTION DE L'UPLOAD CLOUDINARY ---
     const CLOUDINARY_CLOUD_NAME = "dbihs2rzm"; // <-- REMPLACEZ PAR VOTRE CLOUD NAME
-    const CLOUDINARY_UPLOAD_PRESET = "atelier-clarte-bien-etre"; // <-- REMPLACEZ PAR VOTRE UPLOAD PRESET
+    const CLOUDINARY_UPLOAD_PRESET = "atelier-clarte-bien-etre-upload"; // <-- REMPLACEZ PAR VOTRE UPLOAD PRESET
 
     function setupCloudinaryUploads() {
         const fileInputs = document.querySelectorAll('input[type="file"][data-cloudinary-field]');
@@ -816,4 +816,5 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- DÉMARRAGE ---
     initializeApp();
 });
+
 
