@@ -517,10 +517,12 @@
                                         préfère la simplicité et l'élégance d'un fond de couleur apaisant.</label></div>
                                 
                                 <div id="hero-image-group" class="conditional-field-group">
-                                    <label for="hero-image-upload">Si vous avez choisi une image,
+                                    <label for="hero-image-upload-input">Si vous avez choisi une image,
                                         veuillez l'uploader ici (format .jpg ou .png, haute résolution et de préférence
                                         horizontale) :</label>
-                                    <input type="file" id="hero-image-upload" name="hero-image-upload" class="file-upload">
+                                    <input type="file" id="hero-image-upload-input" class="file-upload" data-cloudinary-field="hero-image-upload">
+<input type="hidden" id="hero-image-upload" name="hero-image-upload">
+<span class="upload-status" id="status-hero-image-upload"></span>
                                 </div>
                                 
                                 <div id="hero-color-group" class="conditional-field-group">
@@ -851,10 +853,12 @@
                         </div>
                         <div class="workshop-box">
                             <h5>✍️ Atelier de Sélection Visuelle : Votre Incarnation</h5>
-                            <label for="about-image-upload">Veuillez uploader ici la photo que vous souhaitez utiliser
+                            <label for="about-image-upload-input">Veuillez uploader ici la photo que vous souhaitez utiliser
                                 pour votre section "À Propos".</label>
                             <p class="instruction">Note : Idéalement un portrait vertical, de haute qualité.</p>
-                            <input type="file" id="about-image-upload" name="about-image-upload" class="file-upload">
+                            <input type="file" id="about-image-upload-input" class="file-upload" data-cloudinary-field="about-image-upload">
+<input type="hidden" id="about-image-upload" name="about-image-upload">
+<span class="upload-status" id="status-about-image-upload"></span>
                         </div>
                     </div>
 
@@ -1546,9 +1550,11 @@
                             <!-- Image 1 -->
                             <div class="workshop-part offer-block">
                                 <h6 class="part-title">IMAGE N°1 : LA VUE D'ENSEMBLE</h6>
-                                <label for="portfolio-1-image">1. L'Image : <span class="label-example">Uploadez ici la
+                                <label for="portfolio-1-image-input">1. L'Image : <span class="label-example">Uploadez ici la
                                         photo principale de votre espace (cabinet, studio...).</span></label>
-                                <input type="file" id="portfolio-1-image" name="portfolio-1-image" class="file-upload">
+                                <input type="file" id="portfolio-1-image-input" class="file-upload" data-cloudinary-field="portfolio-1-image">
+<input type="hidden" id="portfolio-1-image" name="portfolio-1-image">
+<span class="upload-status" id="status-portfolio-1-image"></span>
                                 <label for="portfolio-1-title">2. Légende (Optionnel) : <span class="label-example">Ex:
                                         "Un cocon de douceur et de bienveillance pour vous accueillir."</span></label>
                                 <input type="text" id="portfolio-1-title" name="portfolio-1-caption" placeholder="Légende de l'image...">
@@ -1557,9 +1563,11 @@
                             <!-- Image 2 -->
                             <div class="workshop-part offer-block">
                                 <h6 class="part-title">IMAGE N°2 : LE DÉTAIL SIGNIFICATIF (Optionnel)</h6>
-                                <label for="portfolio-2-image">1. L'Image : <span class="label-example">Uploadez une
+                                <label for="portfolio-2-image-input">1. L'Image : <span class="label-example">Uploadez une
                                         photo d'un objet ou d'un détail qui vous représente.</span></label>
-                                <input type="file" id="portfolio-2-image" name="portfolio-2-image" class="file-upload">
+                                <input type="file" id="portfolio-2-image-input" class="file-upload" data-cloudinary-field="portfolio-2-image">
+<input type="hidden" id="portfolio-2-image" name="portfolio-2-image">
+<span class="upload-status" id="status-portfolio-2-image"></span>
                                 <label for="portfolio-2-title">2. Légende (Optionnel) : <span class="label-example">Ex:
                                         "Mes huiles essentielles, choisies avec soin pour chaque séance."</span></label>
                                 <input type="text" id="portfolio-2-title" name="portfolio-2-caption" placeholder="Légende de l'image...">
@@ -1568,10 +1576,12 @@
                             <!-- Image 3 -->
                             <div class="workshop-part offer-block">
                                 <h6 class="part-title">IMAGE N°3 : L'AMBIANCE (Optionnel)</h6>
-                                <label for="portfolio-3-image">1. L'Image : <span class="label-example">Uploadez une
+                                <label for="portfolio-3-image-input">1. L'Image : <span class="label-example">Uploadez une
                                         photo qui évoque le calme, la nature, ou l'émotion de votre
                                         pratique.</span></label>
-                                <input type="file" id="portfolio-3-image" name="portfolio-3-image" class="file-upload">
+                                <input type="file" id="portfolio-3-image-input" class="file-upload" data-cloudinary-field="portfolio-3-image">
+<input type="hidden" id="portfolio-3-image" name="portfolio-3-image">
+<span class="upload-status" id="status-portfolio-3-image"></span>
                                 <label for="portfolio-3-title">2. Légende (Optionnel) : <span class="label-example">Ex:
                                         "Se reconnecter à l'essentiel, une respiration à la fois."</span></label>
                                 <input type="text" id="portfolio-3-title" name="portfolio-3-caption" placeholder="Légende de l'image...">
@@ -1803,9 +1813,11 @@
                                 <label for="testimonial-1-title">3. Ville ou Contexte de l'Accompagnement :</label>
                                 <input type="text" id="testimonial-1-title" name="testimonial-1-context"
                                     placeholder="Ex: Lyon, Accompagnement Anxiété">
-                                <label for="testimonial-1-photo">4. Photo du Client (Optionnel, mais très puissant)
+                                <label for="testimonial-1-photo-input">4. Photo du Client (Optionnel, mais très puissant)
                                     :</label>
-                                <input type="file" id="testimonial-1-photo" name="testimonial-1-photo" class="file-upload">
+                                <input type="file" id="testimonial-1-photo-input" class="file-upload" data-cloudinary-field="testimonial-1-photo">
+<input type="hidden" id="testimonial-1-photo" name="testimonial-1-photo">
+<span class="upload-status" id="status-testimonial-1-photo"></span>
                             </div>
 
                             <!-- Témoignage 2 -->
@@ -1818,8 +1830,10 @@
                                     id="testimonial-2-name" name="testimonial-2-name" placeholder="Ex: Jean M."><label
                                     for="testimonial-2-title">3. Ville ou Contexte :</label><input type="text"
                                     id="testimonial-2-title" name="testimonial-2-context" placeholder="Ex: En visio, Accompagnement Sommeil"><label
-                                    for="testimonial-2-photo">4. Photo du Client :</label><input type="file"
-                                    id="testimonial-2-photo" name="testimonial-2-photo" class="file-upload">
+                                    for="testimonial-2-photo-input">4. Photo du Client :</label><input type="file"
+                                    id="testimonial-2-photo-input" class="file-upload" data-cloudinary-field="testimonial-2-photo">
+<input type="hidden" id="testimonial-2-photo" name="testimonial-2-photo">
+<span class="upload-status" id="status-testimonial-2-photo"></span>
                             </div>
 
                             <!-- Témoignage 3 -->
@@ -1832,8 +1846,10 @@
                                     id="testimonial-3-name" name="testimonial-3-name" placeholder="Ex: Sophie L."><label
                                     for="testimonial-3-title">3. Ville ou Contexte :</label><input type="text"
                                     id="testimonial-3-title" name="testimonial-3-context" placeholder="Ex: Nantes, Atelier Yoga Prénatal"><label
-                                    for="testimonial-3-photo">4. Photo du Client :</label><input type="file"
-                                    id="testimonial-3-photo" name="testimonial-3-photo" class="file-upload">
+                                    for="testimonial-3-photo-input">4. Photo du Client :</label><input type="file"
+                                    id="testimonial-3-photo-input" class="file-upload" data-cloudinary-field="testimonial-3-photo">
+<input type="hidden" id="testimonial-3-photo" name="testimonial-3-photo">
+<span class="upload-status" id="status-testimonial-3-photo"></span>
                             </div>
                         </div>
                     </div>
