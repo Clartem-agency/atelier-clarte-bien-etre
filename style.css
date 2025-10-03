@@ -1081,9 +1081,33 @@ body {
     display: none; /* Caché par défaut */
 }
 
+/* --- STYLES POUR L'UPLOAD CLOUDINARY --- */
+.upload-status {
+    display: block;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.upload-status.uploading {
+    color: #F39C12;
+    background-color: rgba(243, 156, 18, 0.1);
+}
+.upload-status.success {
+    color: var(--success-color);
+    background-color: rgba(46, 204, 113, 0.1);
+}
+.upload-status.error {
+    color: var(--error-color);
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+
 /* --- STYLES SPÉCIFIQUES POUR L'IMPRESSION PDF --- */
 @media print {
-    #vertical-nav, #save-status, .cta-button, .cta-button-secondary, .cta-button-tertiary, input[type="file"], .file-reselect-info, #clear-data-button, #save-pdf-button, #generate-report-button, .steps-list, .premium-feature-box, .personalization-input { display: none !important; }
+    #vertical-nav, #save-status, .cta-button, .cta-button-secondary, .cta-button-tertiary, input[type="file"], .file-reselect-info, #clear-data-button, #save-pdf-button, #generate-report-button, .steps-list, .premium-feature-box, .personalization-input, .upload-status { display: none !important; }
     body { background-color: #FFFFFF !important; color: #000000 !important; font-size: 11pt; }
     .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
     .site-header .logo { max-width: 200px; }
