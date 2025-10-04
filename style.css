@@ -589,6 +589,11 @@ body {
     border-bottom: 1px solid var(--border-color);
 }
 
+/* MODIFICATION CSS : Ajout du curseur pour indiquer que l'image est cliquable */
+.inspiration-item img.gallery-thumbnail {
+    cursor: pointer;
+}
+
 .inspiration-item figcaption {
     padding: 1rem;
     font-size: 0.85rem;
@@ -1122,7 +1127,7 @@ body {
 
 /* --- STYLES SPÉCIFIQUES POUR L'IMPRESSION PDF --- */
 @media print {
-    #vertical-nav, #save-status, .cta-button, .cta-button-secondary, .cta-button-tertiary, input[type="file"], .file-reselect-info, #clear-data-button, #save-pdf-button, #generate-report-button, .steps-list, .premium-feature-box, .personalization-input, .upload-status { display: none !important; }
+    #vertical-nav, #save-status, .cta-button, .cta-button-secondary, .cta-button-tertiary, input[type="file"], .file-reselect-info, #clear-data-button, #save-pdf-button, #generate-report-button, .steps-list, .premium-feature-box, .personalization-input, .upload-status, #lightbox { display: none !important; }
     body { background-color: #FFFFFF !important; color: #000000 !important; font-size: 11pt; }
     .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
     .site-header .logo { max-width: 200px; }
@@ -1376,4 +1381,87 @@ html[data-theme="light"] .vertical-nav li.status-completed .nav-dot::before {
 
 @media print {
     .theme-switcher { display: none !important; }
+}
+
+/* --- STYLES POUR LA LIGHTBOX --- */
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-content {
+    position: relative;
+    padding: 20px;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+#lightbox-image {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 3rem;
+    color: var(--light-cream);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.lightbox-close:hover {
+    transform: scale(1.2);
+}
+
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(25, 34, 79, 0.5);
+    color: var(--light-cream);
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 15px 20px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.lightbox-nav:hover {
+    background-color: rgba(25, 34, 79, 0.8);
+}
+
+.lightbox-prev {
+    left: 20px;
+}
+
+.lightbox-next {
+    right: 20px;
 }
