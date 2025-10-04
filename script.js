@@ -168,16 +168,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-
-    // --- GESTION DU DÉFILEMENT FLUIDE ---
-    const startButton = document.querySelector('.cta-button');
-    if (startButton) {
-        startButton.addEventListener('click', function (event) {
+// --- GESTION DU DÉFILEMENT FLUIDE ---
+// On cible TOUS les .cta-button qui sont des liens (qui ont un attribut href)
+const scrollButtons = document.querySelectorAll('.cta-button[href]');
+if (scrollButtons) {
+    scrollButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
             event.preventDefault();
             const targetId = this.getAttribute('href');
-            document.querySelector(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // On vérifie que la cible existe avant de scroller
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         });
-    }
+    });
+}
+    
+    
 
     // --- FONCTIONS DE GESTION DE LA PROGRESSION ---
     function getSectionStatus(section) {
@@ -900,3 +908,4 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- DÉMARRAGE ---
     initializeApp();
 });
+
