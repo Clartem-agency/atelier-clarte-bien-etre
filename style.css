@@ -1405,22 +1405,26 @@ html[data-theme="light"] .vertical-nav li.status-completed .nav-dot::before {
     visibility: visible;
 }
 
+/* RÈGLE MODIFIÉE */
 .lightbox-content {
     position: relative;
-    padding: 20px;
-    max-width: 90vw;
-    max-height: 90vh;
+    /* On enlève le padding et les contraintes de taille ici.
+       Le conteneur va maintenant s'adapter à la taille de l'image. */
 }
 
+/* RÈGLE MODIFIÉE */
 #lightbox-image {
     display: block;
-    max-width: 100%;
-    max-height: 100%;
+    /* On applique les contraintes de taille directement sur l'image */
+    max-width: 90vw;   /* Ne pas être plus large que 90% de la largeur de l'écran */
+    max-height: 90vh;  /* Ne pas être plus haute que 90% de la hauteur de l'écran */
     width: auto;
     height: auto;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* On ajoute une transition pour un affichage plus doux */
+    transition: transform 0.3s ease;
 }
 
 .lightbox-close {
