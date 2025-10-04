@@ -697,6 +697,89 @@ document.addEventListener('DOMContentLoaded', function () {
         setupArchitectureSync();
     }
 
+    // --- GESTION DE LA LIGHTBOX ---
+    function setupLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        if (!lightbox) return;
+
+        const lightboxImage = document.getElementById('lightbox-image');
+        const closeButton = document.getElementById('lightbox-close');
+        const prevButton = document.getElementById('lightbox-prev');
+        const nextButton = document.getElementById('lightbox-next');
+        const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+
+        let currentImages = [];
+        let currentIndex = 0;
+
+        function showImage(index) {
+            const imageUrl = currentImages[index];
+            lightboxImage.setAttribute('src', imageUrl);
+            currentIndex = index;
+
+            // Gérer la visibilité des flèches
+            prevButton.style.display = index > 0 ? 'block' : 'none';
+            nextButton.style.display = index < currentImages.length - 1 ? 'block' : 'none';
+        }
+
+        function openLightbox(images, index) {
+            currentImages = images;
+            lightbox.classList.add('active');
+            showImage(index);
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lightboxImage.setAttribute('src', ''); // Vider l'image pour éviter un flash de l'ancienne
+        }
+
+        function showNext() {
+            if (currentIndex < currentImages.length - 1) {
+                showImage(currentIndex + 1);
+            }
+        }
+
+        function showPrev() {
+            if (currentIndex > 0) {
+                showImage(currentIndex - 1);
+            }
+        }
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', (e) => {
+                e.preventDefault();
+                const imagesAttr = thumb.getAttribute('data-images');
+                if (imagesAttr) {
+                    const images = imagesAttr.split(',').map(url => url.trim());
+                    openLightbox(images, 0); // Ouvre toujours la galerie à la première image
+                }
+            });
+        });
+
+        closeButton.addEventListener('click', closeLightbox);
+        nextButton.addEventListener('click', showNext);
+        prevButton.addEventListener('click', showPrev);
+
+        // Fermer en cliquant sur le fond
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Gérer la navigation au clavier
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowRight') {
+                    showNext();
+                } else if (e.key === 'ArrowLeft') {
+                    showPrev();
+                }
+            }
+        });
+    }
+
     // --- FONCTION D'INITIALISATION GLOBALE ---
     function initializeApp() {
         allFormElements = Array.from(document.querySelectorAll('input, textarea'));
@@ -707,7 +790,8 @@ document.addEventListener('DOMContentLoaded', function () {
         setupVerticalNavObserver();
         setupConditionalFields();
         setupPersonalization();
-        setupCloudinaryUploads(); // NOUVEL APPEL
+        setupCloudinaryUploads();
+        setupLightbox(); // NOUVEL APPEL POUR LA LIGHTBOX
         
         allFormElements.forEach(input => {
             // On exclut les champs de type 'file' de la sauvegarde auto standard,
@@ -816,4 +900,3 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- DÉMARRAGE ---
     initializeApp();
 });
-
