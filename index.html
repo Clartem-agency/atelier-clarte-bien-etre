@@ -487,16 +487,21 @@
                             <div class="inspiration-container">
                                 <h4 class="inspiration-title">Quelques ambiances pour vous inspirer</h4>
                                 <div class="inspiration-gallery">
+                                    <!-- MODIFICATION HTML : Ajout de la classe "gallery-thumbnail" et de l'attribut "data-images" -->
                                     <figure class="inspiration-item">
-                                        <img src="https://i.ibb.co/F8LzP5N/hero-bien-etre-1.jpg"
-                                            alt="Exemple de section héros avec une ambiance nature et zen">
+                                        <img src="images/hero-nature-1.png"
+                                            alt="Exemple de section héros avec une ambiance nature et zen"
+                                            class="gallery-thumbnail"
+                                            data-images="images/hero-nature-1.png,images/hero-nature-2.png">
                                         <figcaption><strong>Style "Nature / Organique" :</strong> Une image évoquant la
                                             nature, la douceur et le calme pour une connexion immédiate à l'essentiel.
                                         </figcaption>
                                     </figure>
                                     <figure class="inspiration-item">
-                                        <img src="https://i.ibb.co/b2V87vW/hero-bien-etre-2.jpg"
-                                            alt="Exemple de section héros avec une photo d'un cabinet de thérapeute">
+                                        <img src="images/hero-cabinet-1.png"
+                                            alt="Exemple de section héros avec une photo d'un cabinet de thérapeute"
+                                            class="gallery-thumbnail"
+                                            data-images="images/hero-cabinet-1.png,images/hero-cabinet-2.png,images/hero-cabinet-3.png">
                                         <figcaption><strong>Style "Cabinet / Cocon" :</strong> Une photo de votre lieu
                                             de
                                             pratique, lumineux et accueillant, pour rassurer et inviter à se sentir en
@@ -504,8 +509,10 @@
                                         </figcaption>
                                     </figure>
                                     <figure class="inspiration-item">
-                                        <img src="https://i.ibb.co/V95wG3J/hero-example-3.jpg"
-                                            alt="Exemple de section héros minimaliste avec un fond de couleur et une grande typographie">
+                                        <img src="images/hero-epure-1.png"
+                                            alt="Exemple de section héros minimaliste avec un fond de couleur et une grande typographie"
+                                            class="gallery-thumbnail"
+                                            data-images="images/hero-epure-1.png,images/hero-epure-2.png">
                                         <figcaption><strong>Style "Minimaliste / Épuré" :</strong> Pas d'image, toute la
                                             puissance est dans le message et les couleurs douces pour un impact apaisant
                                             et
@@ -1792,35 +1799,41 @@
                             </div>
 
                             <!-- Galerie d'Inspiration -->
-                            <div class="inspiration-container">
-                                <h4 class="inspiration-title">Quelques exemples concrets pour vous inspirer</h4>
-                                <div class="inspiration-gallery">
-                                    <figure class="inspiration-item">
-                                        <img src="https://i.ibb.co/b2V87vW/hero-bien-etre-2.jpg"
-                                            alt="Exemple d'une photo de cabinet de thérapeute lumineux et accueillant">
-                                        <figcaption><strong>Votre Espace d'Écoute :</strong> Une vue d'ensemble de votre
-                                            cabinet qui montre un lieu propre, lumineux et confortable. Le visiteur peut
-                                            s'imaginer assis dans le fauteuil.</figcaption>
-                                    </figure>
-                                    <figure class="inspiration-item">
-                                        <img src="https://i.ibb.co/VvW32z9/details-bien-etre.jpg"
-                                            alt="Exemple d'un gros plan sur des huiles de massage et une bougie">
-                                        <figcaption><strong>Les Détails qui Apaisent :</strong> Un gros plan sur des
-                                            éléments de votre pratique. Cela montre votre attention au détail et crée
-                                            une
-                                            atmosphère de soin et de douceur.</figcaption>
-                                    </figure>
-                                    <figure class="inspiration-item">
-                                        <img src="https://i.ibb.co/JqjP2cZ/ambiance-yoga.jpg"
-                                            alt="Exemple d'une photo d'ambiance avec un tapis de yoga près d'une fenêtre">
-                                        <figcaption><strong>Une Invitation à la Reconnexion :</strong> Une photo qui
-                                            n'est
-                                            pas directement votre cabinet, mais qui évoque parfaitement l'état d'esprit
-                                            de
-                                            votre pratique (calme, introspection, nature).</figcaption>
-                                    </figure>
-                                </div>
-                            </div>
+<div class="inspiration-container">
+    <h4 class="inspiration-title">Quelques exemples concrets pour vous inspirer</h4>
+    <div class="inspiration-gallery">
+        <figure class="inspiration-item">
+            <img src="images/galerie-espace-1.png"
+                alt="Exemple d'une photo de cabinet de thérapeute lumineux et accueillant"
+                class="gallery-thumbnail"
+                data-images="images/galerie-espace-1.png,images/galerie-espace-2.png">
+            <figcaption><strong>Votre Espace d'Écoute :</strong> Une vue d'ensemble de votre
+                cabinet qui montre un lieu propre, lumineux et confortable. Le visiteur peut
+                s'imaginer assis dans le fauteuil.</figcaption>
+        </figure>
+        <figure class="inspiration-item">
+            <img src="images/galerie-detail-1.png"
+                alt="Exemple d'un gros plan sur des huiles de massage et une bougie"
+                class="gallery-thumbnail"
+                data-images="images/galerie-detail-1.png,images/galerie-detail-2.png">
+            <figcaption><strong>Les Détails qui Apaisent :</strong> Un gros plan sur des
+                éléments de votre pratique. Cela montre votre attention au détail et crée
+                une
+                atmosphère de soin et de douceur.</figcaption>
+        </figure>
+        <figure class="inspiration-item">
+            <img src="images/galerie-reconnexion-1.png"
+                alt="Exemple d'une photo d'ambiance avec un tapis de yoga près d'une fenêtre"
+                class="gallery-thumbnail"
+                data-images="images/galerie-reconnexion-1.png,images/galerie-reconnexion-2.png,images/galerie-reconnexion-3.png">
+            <figcaption><strong>Une Invitation à la Reconnexion :</strong> Une photo qui
+                n'est
+                pas directement votre cabinet, mais qui évoque parfaitement l'état d'esprit
+                de
+                votre pratique (calme, introspection, nature).</figcaption>
+        </figure>
+    </div>
+</div>
 
                             <div class="workshop-box">
                                 <h5>✍️ Atelier de Création de Votre Galerie Personnelle</h5>
@@ -3084,7 +3097,7 @@
                                 confirmer. Le tout, sans jamais quitter votre site, dans une interface claire et
                                 rassurante.
                             </p>
-                            <img src="https://i.ibb.co/k8W9k4d/booking-example-calendly.jpg"
+                            <img src="images/apercu-calendly.jpg"
                                 alt="Exemple d'un module de réservation Calendly intégré sur un site web"
                                 class="inspiration-single-image">
                         </div>
@@ -4061,6 +4074,16 @@
 
     </form>
 
+    <!-- MODIFICATION HTML : Ajout de la structure de la lightbox -->
+    <div id="lightbox" class="lightbox">
+        <button id="lightbox-close" class="lightbox-close" aria-label="Fermer">&times;</button>
+        <button id="lightbox-prev" class="lightbox-nav lightbox-prev" aria-label="Image précédente">&#10094;</button>
+        <div class="lightbox-content">
+            <img src="" alt="Image agrandie" id="lightbox-image">
+        </div>
+        <button id="lightbox-next" class="lightbox-nav lightbox-next" aria-label="Image suivante">&#10095;</button>
+    </div>
+    <!-- FIN DE L'AJOUT -->
 
     <script src="script.js"></script>
 
