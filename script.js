@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- CONFIGURATION CENTRALE DES SECTIONS ---
     const SECTIONS_CONFIG = [
+        { id: 'section-0-foundations', key: 'foundations', name: 'Fondations : Votre Nom', keyFields: ['domain-choice-final'], isOptional: false, isFilled: () => !!document.getElementById('domain-choice-final')?.value.trim() },
         { id: 'section-1-hero', key: 'hero', name: 'Héros : Votre Invitation', keyFields: ['hero-title-1', 'hero-cta-primary'], isOptional: false, isFilled: () => !!document.getElementById('hero-title-1')?.value.trim() },
         { id: 'section-2-about', key: 'about', name: 'À Propos : Votre Histoire', keyFields: ['about-title-final', 'about-story-final'], isOptional: false, isFilled: () => !!document.getElementById('about-title-final')?.value.trim() },
         { id: 'section-3-services', key: 'services', name: 'Accompagnements : Vos Offres', keyFields: ['services-title-final', 'service-1-name'], isOptional: false, isFilled: () => !!document.getElementById('service-1-name')?.value.trim() },
@@ -364,6 +365,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initializeSummaries() {
+        // Section 0: Fondations
+        setupSync('domain-choice-final', 'summary-domain-choice');
+
         // Section 1: Héros
         setupSync('hero-title-1', 'summary-hero-title-1');
         setupSync('hero-subtitle-1', 'summary-hero-subtitle-1');
