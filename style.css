@@ -440,6 +440,10 @@ body {
     color: var(--success-color);
 }
 
+
+
+
+
 .instruction {
     font-style: italic;
     color: rgba(245, 239, 225, 0.7);
@@ -1379,6 +1383,78 @@ html[data-theme="light"] .vertical-nav li.status-completed .nav-dot::before {
     color: var(--light-cream);
 }
 
+
+/* --- STYLES POUR LE GUIDE D'UTILISATION --- */
+.user-guide-box {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--background-accent);
+}
+
+.user-guide-box h3 {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.user-guide-box > p {
+    text-align: center;
+    max-width: 650px;
+    margin: 0 auto 2.5rem auto;
+    color: rgba(245, 239, 225, 0.8);
+}
+
+.guide-list {
+    list-style: none;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.guide-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.guide-icon {
+    font-size: 2rem;
+    margin-top: -0.25rem;
+}
+
+.guide-text {
+    line-height: 1.7;
+    color: rgba(245, 239, 225, 0.9);
+}
+
+
+/* -- NOUVELLE RÈGLE CORRIGÉE -- */
+.guide-text strong {
+    display: inline; /* <-- On le remet en mode "mot normal" */
+    font-weight: 600;
+    color: var(--cream);
+    font-size: 1.1rem;
+    margin-right: 0.5rem; /* On ajoute un petit espace après le titre */
+}
+
+html[data-theme="light"] .user-guide-box > p,
+html[data-theme="light"] .guide-text {
+    color: rgba(25, 34, 79, 0.85);
+}
+
+
+
+
 @media print {
     .theme-switcher { display: none !important; }
 }
@@ -1468,4 +1544,51 @@ html[data-theme="light"] .vertical-nav li.status-completed .nav-dot::before {
 
 .lightbox-next {
     right: 20px;
+}
+
+
+
+
+
+/* ======================================================= */
+/*      NOUVEAU STYLE : BOÎTES JURIDIQUES & SÉCURITÉ       */
+/* ======================================================= */
+
+.tip-box.legal {
+    background-color: rgba(243, 156, 18, 0.15); /* Fond Ambre léger */
+    border: 1px solid rgba(243, 156, 18, 0.3);
+    border-left: 6px solid #F39C12; /* Bordure gauche épaisse et visible */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Ombre pour détacher du fond */
+    position: relative;
+    padding-left: 2rem;
+}
+
+.tip-box.legal h6 {
+    color: #F39C12; /* Titre en Ambre/Or */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(243, 156, 18, 0.2);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.tip-box.legal .icon {
+    font-size: 1.4rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.tip-box.legal strong {
+    color: #F39C12;
+}
+
+/* Ajustement pour le Mode Clair (Light Mode) pour rester lisible */
+html[data-theme="light"] .tip-box.legal {
+    background-color: #FFF8E1; /* Fond crème jaune */
+    border-color: #FFC107;
+}
+html[data-theme="light"] .tip-box.legal h6,
+html[data-theme="light"] .tip-box.legal strong {
+    color: #D35400; /* Orange foncé pour lisibilité sur fond clair */
 }
