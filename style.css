@@ -1881,6 +1881,11 @@ html[data-theme="light"] .tip-box.legal strong {
 }
 
 /* --- Login button --- */
+#login-form-wrapper {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
 .login-form {
     display: flex;
     flex-direction: column;
