@@ -1785,17 +1785,6 @@ html[data-theme="light"] .tip-box.legal strong {
    =================================================================== */
 
 /* --- Gate overlay --- */
-/* Force le widget Netlify Identity à s'afficher AU-DESSUS du login-gate */
-.ReactModalPortal,
-.ReactModal__Overlay,
-.ReactModal__Content,
-.netlify-identity-menu,
-.netlify-identity-page,
-[class*="netlifyIdentity"],
-[class*="ReactModal"] {
-    z-index: 99999 !important;
-}
-
 .login-gate {
     position: fixed;
     inset: 0;
@@ -1892,6 +1881,63 @@ html[data-theme="light"] .tip-box.legal strong {
 }
 
 /* --- Login button --- */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.login-input {
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    color: var(--cream, #F5F0E8);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0.85rem 1.2rem;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.login-input::placeholder {
+    color: rgba(245, 240, 232, 0.4);
+}
+
+.login-input:focus {
+    border-color: var(--accent, #D4A853);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.login-error {
+    font-family: var(--font-primary);
+    font-size: 0.85rem;
+    color: #e57373;
+    text-align: center;
+    margin: 0;
+    padding: 0 0.5rem;
+    line-height: 1.4;
+}
+
+/* Light theme overrides for login form */
+[data-theme="light"] .login-input {
+    color: var(--dark-blue, #0F1635);
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .login-input::placeholder {
+    color: rgba(15, 22, 53, 0.4);
+}
+
+[data-theme="light"] .login-input:focus {
+    border-color: var(--accent, #D4A853);
+    background: rgba(0, 0, 0, 0.06);
+}
+
 .login-button {
     display: inline-flex;
     align-items: center;
