@@ -1788,11 +1788,12 @@ html[data-theme="light"] .tip-box.legal strong {
 /* Force le widget Netlify Identity à s'afficher AU-DESSUS du login-gate */
 .ReactModalPortal,
 .ReactModal__Overlay,
+.ReactModal__Content,
 .netlify-identity-menu,
 .netlify-identity-page,
 [class*="netlifyIdentity"],
 [class*="ReactModal"] {
-    z-index: 10001 !important;
+    z-index: 99999 !important;
 }
 
 .login-gate {
