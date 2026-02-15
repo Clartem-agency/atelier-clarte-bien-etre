@@ -29,10 +29,20 @@
             <div class="login-accent"></div>
             <h2 class="login-title">Votre <em>Atelier de Clarté</em></h2>
             <p class="login-subtitle">Connectez-vous pour accéder à votre espace personnel et commencer à donner vie à votre site.</p>
-            <button id="login-btn" class="login-button">
-                <span class="login-btn-icon">✦</span>
-                Se connecter
-            </button>
+            
+            <!-- Formulaire de connexion intégré -->
+            <div id="login-form-wrapper">
+                <div class="login-form">
+                    <input type="email" id="login-email" class="login-input" placeholder="Votre adresse email" autocomplete="email">
+                    <input type="password" id="login-password" class="login-input" placeholder="Votre mot de passe" autocomplete="current-password">
+                    <p id="login-error" class="login-error" style="display: none;"></p>
+                    <button id="login-btn" class="login-button">
+                        <span class="login-btn-icon">✦</span>
+                        <span id="login-btn-text">Se connecter</span>
+                    </button>
+                </div>
+            </div>
+
             <p class="login-footer">Un espace protégé, rien que pour vous.</p>
         </div>
     </div>
