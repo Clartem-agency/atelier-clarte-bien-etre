@@ -254,11 +254,18 @@
                     hideError();
                     setLoading(true);
 
-                    // Accepter l'invitation via l'API
-                    fetch(API_URL + '/invite', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ token: token, password: pwd })
+                    // Accepter l'invitation via l'API GoTrue
+                    // Le token d'invitation sert de Bearer token
+                    fetch(API_URL + '/user', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({
+                            password: pwd,
+                            data: {}
+                        })
                     })
                     .then(function (r) {
                         if (!r.ok) {
