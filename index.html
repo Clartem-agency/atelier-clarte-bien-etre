@@ -6,17 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atelier Bien-Être</title>
 
-    <!-- Google Fonts: Poppins -->
+    <!-- Google Fonts: DM Serif Display + DM Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap"
         rel="stylesheet">
 
     <!-- Notre Feuille de Style -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- Netlify Identity Widget pour l'authentification -->
+    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 
 <body>
+
+    <!-- ===== ÉCRAN DE CONNEXION ===== -->
+    <div id="login-gate" class="login-gate">
+        <div class="login-container">
+            <div class="login-glow"></div>
+            <img src="images/logo-clartem-blanc.png" alt="Logo Clartem" class="login-logo">
+            <div class="login-accent"></div>
+            <h2 class="login-title">Votre <em>Atelier de Clarté</em></h2>
+            <p class="login-subtitle">Connectez-vous pour accéder à votre espace personnel et commencer à donner vie à votre site.</p>
+            <button id="login-btn" class="login-button">
+                <span class="login-btn-icon">✦</span>
+                Se connecter
+            </button>
+            <p class="login-footer">Un espace protégé, rien que pour vous.</p>
+        </div>
+    </div>
+    <!-- ===== FIN ÉCRAN DE CONNEXION ===== -->
+
+    <!-- Bouton de déconnexion (visible uniquement quand connecté) -->
+    <button id="logout-btn" class="logout-button" style="display: none;" aria-label="Se déconnecter">
+        <span>⎋</span> Déconnexion
+    </button>
 
 
     <!-- NOUVEAU BOUTON POUR LE THÈME -->
@@ -52,10 +77,11 @@
                             alt="Logo Clartem - Création de sites web pour professionnels du bien-être" class="logo">
                         <!-- J'ai utilisé une version hébergée de votre logo pour l'exemple -->
 
-                        <h1 class="main-title">Bienvenue dans Votre Atelier de Clarté</h1>
-                        <p class="subtitle">Le parcours guidé pour créer votre cocon digital, un site qui inspire
-                            confiance
-                            et sérénité.</p>
+                        <div class="logo-accent"></div>
+
+                        <h1 class="main-title">Bienvenue dans Votre<br><em>Atelier de Clarté</em></h1>
+                        <p class="subtitle">Le parcours guidé pour donner vie à votre cocon digital — un site qui inspire
+                            confiance et sérénité à ceux qui ont besoin de vous.</p>
 
                         <div class="client-info">
                             <div class="info-item">
@@ -110,26 +136,20 @@
                             langage.
                             Il est fait pour vous si vous êtes :</p>
                         <div class="audience-grid">
-                            <div class="audience-category">
+                            <div class="audience-category" data-num="01">
                                 <h4>Thérapies douces</h4>
                                 <p>Sophrologues, Hypnothérapeutes, Naturopathes, Réflexologues, Art-thérapeutes.</p>
                             </div>
-                            <div class="audience-category">
+                            <div class="audience-category" data-num="02">
                                 <h4>Pratiques énergétiques</h4>
                                 <p>Praticiens Reiki, Shiatsu, Magnétiseurs, Énergéticiens, Kinésiologues.</p>
                             </div>
-                            <div class="audience-category">
+                            <div class="audience-category" data-num="03">
                                 <h4>Bien-être corporel</h4>
                                 <p>Masseurs bien-être, Praticiens en massage ayurvédique/californien, Somatothérapeutes.
                                 </p>
                             </div>
-                            <div class="audience-category">
-                                <h4>Beauté & Esthétique</h4>
-                                <p>Esthéticiennes indépendantes, Instituts de beauté, Prothésistes ongulaires,
-                                    Spécialistes
-                                    du regard.</p>
-                            </div>
-                            <div class="audience-category">
+                            <div class="audience-category" data-num="04">
                                 <h4>Accompagnement spécifique</h4>
                                 <p>Doulas, Conseillers en fleurs de Bach, Professeurs de Yoga, Pilates ou Méditation.
                                 </p>
@@ -229,7 +249,7 @@
 
 
                     <div class="cta-container">
-                        <p class="ready-prompt">Prêt(e) à commencer ?</p>
+                        <p class="ready-prompt">Prêt(e) à poser les premières pierres ?</p>
                         <a href="#section-0-foundations" class="cta-button">Commencer l'Atelier de Clarté</a>
 
                         <div class="reset-container">
@@ -4330,7 +4350,7 @@
                                         <h5>Étape 1 : Votre Envoi</h5>
                                         <p>Relisez une dernière fois ce guide. Quand vous êtes prêt(e), enregistrez-le
                                             en
-                                            PDF et envoyez-le moi par email à <strong>[contact@clartem.com]</strong>.
+                                            PDF et envoyez-le moi par email à <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="84e7ebeaf0e5e7f0c4e7e8e5f6f0e1e9aae7ebe9">[email&#160;protected]</a></strong>.
                                         </p>
                                     </li>
                                     <li>
@@ -4403,6 +4423,8 @@
         <button id="lightbox-next" class="lightbox-nav lightbox-next" aria-label="Image suivante">&#10095;</button>
     </div>
     <!-- FIN DE L'AJOUT -->
+
+    <script src="auth.js"></script>
 
     <script src="script.js"></script>
 
