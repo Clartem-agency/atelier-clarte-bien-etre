@@ -62,6 +62,10 @@
         }
         // En mode 'login', l'interface est déjà correcte par défaut
 
+        // --- Afficher le formulaire (caché par défaut via CSS pour éviter le flash) ---
+        var formWrapper = document.getElementById('login-form-wrapper');
+        if (formWrapper) formWrapper.style.opacity = '1';
+
         // --- Gestion de la confirmation ---
         if (savedConfirmToken) {
             handleConfirmation();
@@ -214,11 +218,11 @@
             console.log('[Auth] Acceptation de l\'invitation...');
             console.log('[Auth] Token utilisé:', savedInviteToken.substring(0, 20) + '...');
 
-            // Étape 1 : Vérifier le token d'invitation → obtenir un access_token
+            // Vérifier ET créer le compte en un seul appel
             fetch(API_URL + '/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token: savedInviteToken, type: 'signup' })
+                body: JSON.stringify({ token: savedInviteToken, type: 'signup', password: password })
             })
             .then(function (r) {
                 console.log('[Auth] /verify status:', r.status);
@@ -230,37 +234,9 @@
                 }
                 return r.json();
             })
-            .then(function (verifyData) {
-                console.log('[Auth] Invitation vérifiée ! Clés:', Object.keys(verifyData).join(', '));
-                var accessToken = verifyData.access_token;
-                if (!accessToken) {
-                    throw new Error('Aucun access_token reçu.');
-                }
-
-                // Étape 2 : Définir le mot de passe
-                return fetch(API_URL + '/user', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + accessToken
-                    },
-                    body: JSON.stringify({ password: password })
-                });
-            })
-            .then(function (r) {
-                console.log('[Auth] /user status:', r.status);
-                if (!r.ok) {
-                    return r.text().then(function (txt) {
-                        console.error('[Auth] /user réponse:', txt);
-                        throw new Error('Erreur lors de la création du compte.');
-                    });
-                }
-                return r.json();
-            })
-            .then(function () {
-                console.log('[Auth] Compte créé avec succès !');
+            .then(function (data) {
+                console.log('[Auth] Compte créé avec succès ! Clés:', Object.keys(data).join(', '));
                 showSuccess('Compte créé ! Vous pouvez maintenant vous connecter.');
-                // Nettoyer le hash et passer en mode login
                 history.replaceState(null, '', window.location.pathname);
                 setTimeout(function () { window.location.reload(); }, 2000);
             })
