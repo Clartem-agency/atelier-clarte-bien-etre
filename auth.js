@@ -186,7 +186,7 @@
             // Token d'invitation
             var inviteMatch = hash.match(/invite_token=([^&]+)/);
             if (inviteMatch) {
-                console.log('[Auth] Token d\'invitation détecté.');
+                console.log('[Auth] Token d\'invitation détecté:', inviteMatch[1].substring(0, 20) + '...');
                 showInviteForm(inviteMatch[1]);
                 return;
             }
@@ -254,18 +254,41 @@
                     hideError();
                     setLoading(true);
 
-                    // Accepter l'invitation via l'API GoTrue
-                    // Le token d'invitation sert de Bearer token
-                    fetch(API_URL + '/user', {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + token
-                        },
-                        body: JSON.stringify({
-                            password: pwd,
-                            data: {}
-                        })
+                    // Étape 1 : Vérifier le token d'invitation pour obtenir un access_token
+                    fetch(API_URL + '/verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: token, type: 'invite' })
+                    })
+                    .then(function (r) {
+                        if (!r.ok) {
+                            return r.json().then(function (d) { throw new Error(d.msg || d.error_description || 'Token d\'invitation invalide ou expiré.'); });
+                        }
+                        return r.json();
+                    })
+                    .then(function (verifyData) {
+                        console.log('[Auth] Token d\'invitation vérifié. Définition du mot de passe...');
+                        var accessToken = verifyData.access_token;
+
+                        if (!accessToken) {
+                            throw new Error('Aucun access_token reçu. Veuillez demander une nouvelle invitation.');
+                        }
+
+                        // Étape 2 : Définir le mot de passe avec l'access_token
+                        return fetch(API_URL + '/user', {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + accessToken
+                            },
+                            body: JSON.stringify({ password: pwd })
+                        });
+                    })
+                    .then(function (r) {
+                        if (!r.ok) {
+                            return r.json().then(function (d) { throw new Error(d.msg || 'Erreur lors de la création du compte.'); });
+                        }
+                        return r.json();
                     })
                     .then(function (r) {
                         if (!r.ok) {
